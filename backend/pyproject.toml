@@ -1,0 +1,27 @@
+[project]
+name = "societydesk-backend"
+version = "0.1.0"
+description = "FastAPI backend for SocietyDesk"
+requires-python = ">=3.11"
+dependencies = [
+    "alembic>=1.13.0",
+    "fastapi>=0.115.0",
+    "passlib[bcrypt]>=1.7.4",
+    "psycopg[binary]>=3.2.0",
+    "pyjwt>=2.9.0",
+    "pydantic-settings>=2.6.0",
+    "python-dotenv>=1.0.1",
+    "python-multipart>=0.0.9",
+    "sqlalchemy>=2.0.0",
+    "uvicorn[standard]>=0.30.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.uvicorn]
+factory = false
