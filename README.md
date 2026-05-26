@@ -76,3 +76,19 @@ Deploy from Render by creating a new Blueprint from this repository. Render will
 prompt for `JWT_SECRET_KEY`.
 
 More details are in `docs/render.md`.
+
+## Docker
+
+Run the full stack locally with Docker:
+
+```powershell
+docker compose up --build
+```
+
+Then seed data:
+
+```powershell
+docker compose exec backend python scripts/seed.py
+```
+
+More details are in `docs/docker.md`.

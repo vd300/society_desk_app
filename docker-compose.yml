@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: societydesk
+      POSTGRES_USER: societydesk
+      POSTGRES_PASSWORD: societydesk
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U societydesk -d societydesk"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      APP_NAME: SocietyDesk API
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql://societydesk:societydesk@db:5432/societydesk
+      JWT_SECRET_KEY: change-this-secret-before-production
+      JWT_ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 1440
+      UPLOAD_DIR: uploads
+      CORS_ORIGINS: http://localhost:3000
+      PORT: 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  backend_uploads:
